@@ -5,15 +5,26 @@
   <script>
     if (window.top !== window.self) {
       var isAllowed = false;
-      var allowed = 'miniwebgames.local';
-      if (window.location.ancestorOrigins) {
+      var allowedDomains = ["miniwebgames.com", "miniwebgames.local", "localhost", "harutheme.github.io"];
+      if (window.location.ancestorOrigins && window.location.ancestorOrigins.length > 0) {
         for (var i = 0; i < window.location.ancestorOrigins.length; i++) {
-          if (window.location.ancestorOrigins[i].indexOf(allowed) !== -1) {
-            isAllowed = true; break;
+          for (var j = 0; j < allowedDomains.length; j++) {
+            if (window.location.ancestorOrigins[i].indexOf(allowedDomains[j]) !== -1) {
+              isAllowed = true;
+              break;
+            }
+          }
+          if (isAllowed) break;
+        }
+      } else if (document.referrer) {
+        for (var k = 0; k < allowedDomains.length; k++) {
+          if (document.referrer.indexOf(allowedDomains[k]) !== -1) {
+            isAllowed = true;
+            break;
           }
         }
       } else {
-        try { if (document.referrer.indexOf(allowed) !== -1) isAllowed = true; } catch (e) { }
+        isAllowed = true;
       }
       if (!isAllowed) {
         document.documentElement.innerHTML = '<div style="color:white;background:black;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;"><h1>Hotlinking is disabled.</h1></div>';
@@ -167,9 +178,7 @@
 
   <div id="loading" class="screen">
     <noscript>Enable JavaScript</noscript>
-    <h1 class="loading-text">
-      <script>document.write("miniwebgames.com" || window.location.hostname)</script>
-    </h1>
+    <h1 class="loading-text">miniwebgames.com</h1>
     <div class="progress-bar-outer">
       <div class="progress-bar-inner" id="loading-inner"></div>
     </div>
